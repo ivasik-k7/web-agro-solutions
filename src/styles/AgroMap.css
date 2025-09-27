@@ -1,0 +1,499 @@
+/* AgroMap.css */
+.agro-map-container {
+  position: fixed;
+  top: 0;
+  left: 340px; /* Match sidebar width */
+  right: 340px; /* Match sidebar width */
+  height: 100vh;
+  background: var(--agro-darker);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.map-background-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--agro-dark) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--agro-dark) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--agro-dark) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--agro-dark) 75%);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: 0 0, 0 calc(var(--grid-size) / 2),
+    calc(var(--grid-size) / 2) calc(var(--grid-size) / -2),
+    calc(var(--grid-size) / -2) 0;
+  background-color: var(--agro-darker);
+  opacity: 0.4;
+  transition: opacity var(--transition-normal);
+}
+
+.map-background {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(0, 168, 107, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(0, 212, 170, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(0, 255, 200, 0.03) 0%,
+      transparent 50%
+    );
+  position: relative;
+  overflow: hidden;
+}
+
+.map-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+      90deg,
+      transparent 95%,
+      rgba(0, 212, 170, 0.02) 100%
+    ),
+    linear-gradient(0deg, transparent 95%, rgba(0, 212, 170, 0.02) 100%);
+  background-size: 100px 100px;
+}
+
+.map-background[data-zoom-level]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    var(--agro-darker) 100%
+  );
+  opacity: calc(0.3 * (1 - var(--zoom-level, 1)));
+  pointer-events: none;
+}
+
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.drawing-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: filter var(--transition-normal);
+}
+
+/* Tool-specific cursor styles */
+.drawing-canvas[data-tool="select"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%2300ffc8" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="%2300ffc8"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="rectangle"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="%2300ffc8" stroke-width="2"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="circle"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%2300ffc8" stroke-width="2"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="triangle"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4 L20 20 L4 20 Z" fill="none" stroke="%2300ffc8" stroke-width="2"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="polygon"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><polygon points="12,2 22,8 22,16 12,22 2,16 2,8" fill="none" stroke="%2300ffc8" stroke-width="2"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="freehand"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 18 C8 15 10 12 12 9 C14 6 16 3 18 6 C20 9 18 12 16 15 C14 18 12 21 9 18 C6 15 4 12 6 9 C8 6 10 3 12 6" fill="none" stroke="%2300ffc8" stroke-width="2"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas[data-tool="pan"] {
+  cursor: grab;
+}
+
+.drawing-canvas[data-tool="pan"]:active {
+  cursor: grabbing;
+}
+
+.drawing-canvas[data-tool="measure"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h2v18H3zM7 5h2v2H7zM11 7h2v2h-2zM15 9h2v2h-2zM19 11h2v2h-2z" fill="%2300ffc8"/><circle cx="5" cy="5" r="1" fill="%2300ffc8"/><circle cx="19" cy="19" r="1" fill="%2300ffc8"/></svg>')
+      12 12,
+    auto;
+}
+
+.drawing-canvas:active {
+  cursor: none;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tool-indicator {
+  position: absolute;
+  top: var(--space-lg);
+  left: var(--space-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  box-shadow: var(--glass-shadow), var(--shadow-glow);
+  animation: slideInLeft 0.3s ease-out;
+  pointer-events: all;
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-glow);
+}
+
+.tool-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--agro-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grid-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+      rgba(0, 212, 170, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+  opacity: 0.5;
+  animation: gridMove 20s linear infinite;
+}
+
+/* Zoom Controls Positioning */
+.agro-map-container .zoom-controls {
+  position: absolute;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 20;
+}
+
+/* Animation for grid movement */
+@keyframes gridMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-glow);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 255, 200, 0.6);
+  }
+}
+
+/* Zoom level effects */
+.drawing-canvas[data-zoom-level^="2"] {
+  filter: brightness(1.1) contrast(1.1);
+}
+
+.drawing-canvas[data-zoom-level^="3"] {
+  filter: brightness(1.2) contrast(1.2);
+}
+
+.drawing-canvas[data-zoom-level^="4"] {
+  filter: brightness(1.3) contrast(1.3);
+}
+
+.drawing-canvas[data-zoom-level^="5"] {
+  filter: brightness(1.4) contrast(1.4);
+}
+
+/* Selection effects */
+.drawing-canvas.selecting {
+  cursor: crosshair !important;
+}
+
+.drawing-canvas.drawing {
+  cursor: none !important;
+}
+
+/* Measurement tool overlay */
+.measurement-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.measurement-line {
+  stroke: var(--agro-accent);
+  stroke-width: 2;
+  stroke-dasharray: 5, 5;
+  animation: dashMove 1s linear infinite;
+}
+
+.measurement-label {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--agro-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes dashMove {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .agro-map-container {
+    left: 300px;
+    right: 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .agro-map-container {
+    left: 280px;
+    right: 280px;
+  }
+
+  .tool-indicator {
+    top: var(--space-md);
+    left: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+@media (max-width: 1024px) {
+  .agro-map-container {
+    left: 260px;
+    right: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .agro-map-container {
+    left: 0;
+    right: 0;
+    top: 0;
+  }
+
+  .tool-indicator {
+    flex-direction: column;
+    gap: var(--space-sm);
+    text-align: center;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    right: var(--space-sm);
+  }
+
+  .agro-map-container .zoom-controls {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    transform: scale(0.9);
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .grid-pattern {
+    background-size: 25px 25px;
+  }
+
+  .map-background::before {
+    background-size: 50px 50px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .agro-map-container {
+    position: relative;
+    left: 0;
+    right: 0;
+    height: auto;
+  }
+
+  .tool-indicator,
+  .zoom-controls {
+    display: none;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .grid-pattern {
+    animation: none;
+  }
+
+  .tool-indicator {
+    animation: none;
+  }
+
+  .measurement-line {
+    animation: none;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .agro-map-container {
+    background: var(--agro-darker);
+  }
+
+  .map-background-container {
+    opacity: 0.3;
+  }
+}
+
+/* Focus styles for accessibility */
+.drawing-canvas:focus-visible {
+  outline: 2px solid var(--agro-accent);
+  outline-offset: 2px;
+}
+
+.zoom-controls:focus-within {
+  outline: 2px solid var(--agro-accent);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.agro-map-container.loading .drawing-canvas {
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.agro-map-container.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--agro-secondary);
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 100;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Performance optimizations */
+.agro-map-container {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.drawing-canvas {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Scrollbar styling for map container (if needed) */
+.agro-map-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.agro-map-container::-webkit-scrollbar-track {
+  background: var(--agro-dark);
+}
+
+.agro-map-container::-webkit-scrollbar-thumb {
+  background: var(--agro-secondary);
+  border-radius: var(--radius-md);
+}
+
+.agro-map-container::-webkit-scrollbar-thumb:hover {
+  background: var(--agro-accent);
+}

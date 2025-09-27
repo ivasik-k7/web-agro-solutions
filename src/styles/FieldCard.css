@@ -1,0 +1,93 @@
+.field-card {
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 8px;
+  background: #fff;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+.field-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+.field-card.selected {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px #4caf50;
+}
+
+.field-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+}
+
+.field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.field-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+.field-info {
+  flex: 1;
+}
+.field-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+.field-type {
+  font-size: 13px;
+  color: #666;
+  text-transform: capitalize;
+}
+.edit-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.edit-button:hover {
+  opacity: 1;
+}
+
+.field-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.field-stat {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #333;
+  background: #f9f9f9;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.stat-icon {
+  margin-right: 4px;
+}
+
+.field-notes {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
+  font-style: italic;
+}

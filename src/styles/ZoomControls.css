@@ -1,0 +1,300 @@
+/* ZoomControls.css */
+.zoom-controls {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-md);
+  box-shadow: var(--glass-shadow), var(--shadow-glow);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.zoom-controls-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--gradient-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-sm);
+  border: 1px solid rgba(0, 212, 170, 0.1);
+}
+
+.zoom-button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  color: var(--agro-darker);
+  font-size: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.zoom-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  border-radius: var(--radius-lg);
+}
+
+.zoom-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.zoom-button:active {
+  transform: translateY(0);
+  transition: var(--transition-fast);
+}
+
+.zoom-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.zoom-in:hover {
+  background: linear-gradient(
+    135deg,
+    var(--agro-accent),
+    var(--agro-secondary)
+  );
+}
+
+.zoom-out:hover {
+  background: linear-gradient(
+    135deg,
+    var(--agro-secondary),
+    var(--agro-primary)
+  );
+}
+
+.button-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 200, 0.4) 0%,
+    transparent 70%
+  );
+  transition: all var(--transition-slow);
+  transform: translate(-50%, -50%);
+}
+
+.zoom-button:hover .button-glow {
+  width: 100px;
+  height: 100px;
+}
+
+.zoom-icon {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.zoom-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--space-md);
+  min-width: 80px;
+}
+
+.zoom-level {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--agro-accent);
+  font-family: var(--font-mono);
+  background: linear-gradient(
+    135deg,
+    var(--agro-accent),
+    var(--agro-secondary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
+}
+
+.zoom-label {
+  font-size: 0.7rem;
+  color: var(--agro-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+.zoom-reset {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-surface);
+  color: var(--agro-light);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.zoom-reset:hover {
+  background: var(--agro-surface);
+  border-color: rgba(0, 212, 170, 0.3);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.zoom-reset:hover .reset-icon {
+  transform: rotate(180deg);
+}
+
+.reset-icon {
+  font-size: 1rem;
+  transition: transform var(--transition-slow);
+  filter: drop-shadow(0 0 4px rgba(0, 212, 170, 0.5));
+}
+
+.reset-text {
+  font-weight: 600;
+}
+
+.zoom-reset .button-glow {
+  background: radial-gradient(
+    circle,
+    rgba(0, 168, 107, 0.3) 0%,
+    transparent 70%
+  );
+}
+
+/* Zoom level indicator animations */
+.zoom-controls[data-zoom-level="100"] .zoom-level {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.zoom-controls[data-zoom-level^="2"] .zoom-level,
+.zoom-controls[data-zoom-level^="3"] .zoom-level {
+  color: var(--warning);
+  background: linear-gradient(135deg, var(--warning), #ff6d00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.zoom-controls[data-zoom-level^="4"] .zoom-level,
+.zoom-controls[data-zoom-level^="5"] .zoom-level {
+  color: var(--error);
+  background: linear-gradient(135deg, var(--error), #dd2c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .zoom-controls {
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 768px) {
+  .zoom-controls {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    transform: scale(0.85);
+  }
+
+  .zoom-controls-group {
+    flex-direction: column;
+  }
+
+  .zoom-display {
+    min-width: 60px;
+    padding: var(--space-xs) 0;
+  }
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(0, 255, 200, 0.6),
+      0 0 30px rgba(0, 255, 200, 0.4);
+  }
+}
+
+/* Tool-specific cursor styles for the map */
+.agro-map-container[data-tool="select"] {
+  cursor: default;
+}
+
+.agro-map-container[data-tool="rectangle"],
+.agro-map-container[data-tool="circle"],
+.agro-map-container[data-tool="triangle"],
+.agro-map-container[data-tool="polygon"] {
+  cursor: crosshair;
+}
+
+.agro-map-container[data-tool="freehand"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="%2300ffc8"/></svg>')
+      12 12,
+    auto;
+}
+
+.agro-map-container[data-tool="pan"] {
+  cursor: grab;
+}
+
+.agro-map-container[data-tool="pan"]:active {
+  cursor: grabbing;
+}
+
+.agro-map-container[data-tool="measure"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 3h2v18H3zM7 5h2v2H7zM11 7h2v2h-2zM15 9h2v2h-2zM19 11h2v2h-2z" fill="%2300ffc8"/></svg>')
+      12 12,
+    auto;
+}
