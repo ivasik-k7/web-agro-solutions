@@ -2,8 +2,8 @@
 .agro-map-container {
   position: fixed;
   top: 0;
-  left: 340px; /* Match sidebar width */
-  right: 340px; /* Match sidebar width */
+  left: 320px; /* Match sidebar width */
+  right: 320px; /* Match sidebar width */
   height: 100vh;
   background: var(--agro-darker);
   overflow: hidden;

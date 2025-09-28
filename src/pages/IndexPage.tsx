@@ -4,7 +4,7 @@ import { useAgroDataManager } from '@/hooks/useAgroDataManager';
 
 import { PlanningView } from '@components/PlanningView';
 import { LeftSidebar, RightSidebar } from "@components/Sidebar";
-import { AnalyticsView } from "@/components/AnalyticsPage";
+// import { AnalyticsView } from "@/components/AnalyticsPage";
 import { FieldDetailsPanel } from '@components/FieldDetailsPanel';
 import { AgroMap } from '@/components/AgroMap';
 
@@ -40,7 +40,7 @@ const AppContent: React.FC = () => {
     };
 
     const {
-        mapCenter,
+        // mapCenter,
         mapZoom,
         isDragging,
         isDrawing,
@@ -86,7 +86,7 @@ const AppContent: React.FC = () => {
                 return (
                     <PlanningView
                         fields={agroData.fields}
-                        tasks={agroData.tasks} onTaskUpdate={function (taskId: string, status: Task['status'], actualDuration?: number): void {
+                        tasks={agroData.tasks} onTaskUpdate={function (_taskId: string, _status: Task['status'], _actualDuration?: number): void {
                             throw new Error('Function not implemented.');
                         }}                        // onTaskUpdate={(taskId, updates) => agroData.updateTask(taskId, updates)}
                     />

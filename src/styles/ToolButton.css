@@ -1,0 +1,336 @@
+/* ToolButton.css */
+.tool-button {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  overflow: hidden;
+  min-height: 80px;
+}
+
+.tool-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.tool-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-glow);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.tool-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, transparent, transparent) padding-box,
+    linear-gradient(135deg, var(--glass-border), var(--glass-border)) border-box;
+  transition: all var(--transition-normal);
+}
+
+/* Active State */
+.tool-button.active {
+  background: rgba(0, 212, 170, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.tool-button.active .tool-glow {
+  opacity: 0.3;
+}
+
+.tool-button.active .tool-border {
+  background: linear-gradient(135deg, transparent, transparent) padding-box,
+    linear-gradient(135deg, var(--agro-accent), var(--agro-primary)) border-box;
+  border-width: 2px;
+}
+
+.tool-button.active .tool-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.6));
+}
+
+/* Hover Effects */
+.tool-button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--agro-secondary);
+  transform: translateY(-1px);
+}
+
+.tool-button:hover .tool-glow {
+  opacity: 0.1;
+}
+
+.tool-button:hover .tool-border {
+  border-color: var(--agro-secondary);
+}
+
+/* Tool Content */
+.tool-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.tool-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  transition: all var(--transition-normal);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.active-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--agro-accent);
+  border-radius: 50%;
+  border: 2px solid var(--agro-darker);
+  box-shadow: 0 0 8px var(--agro-accent);
+  animation: pulse 2s infinite;
+}
+
+/* Tool Info */
+.tool-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.tool-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--agro-light);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.tool-shortcut {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--agro-secondary);
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+}
+
+.tool-button.active .tool-shortcut {
+  background: rgba(0, 212, 170, 0.2);
+  color: var(--agro-accent);
+}
+
+/* Tool Tooltip */
+.tool-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--agro-dark);
+  border: 1px solid var(--agro-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.75rem;
+  color: var(--agro-light);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+}
+
+.tool-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--agro-primary);
+}
+
+.tool-button:hover .tool-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Specific Tool Styles */
+.tool-button[data-tool="select"] .tool-icon {
+  color: #00e676;
+}
+
+.tool-button[data-tool="rectangle"] .tool-icon {
+  color: #29b6f6;
+}
+
+.tool-button[data-tool="circle"] .tool-icon {
+  color: #ab47bc;
+}
+
+.tool-button[data-tool="polygon"] .tool-icon {
+  color: #ff9100;
+}
+
+.tool-button[data-tool="freehand"] .tool-icon {
+  color: #f44336;
+}
+
+.tool-button[data-tool="pan"] .tool-icon {
+  color: #9ccc65;
+}
+
+.tool-button[data-tool="measure"] .tool-icon {
+  color: #26c6da;
+}
+
+.tool-button.active[data-tool="select"] {
+  border-color: #00e676;
+}
+
+.tool-button.active[data-tool="rectangle"] {
+  border-color: #29b6f6;
+}
+
+.tool-button.active[data-tool="circle"] {
+  border-color: #ab47bc;
+}
+
+.tool-button.active[data-tool="polygon"] {
+  border-color: #ff9100;
+}
+
+.tool-button.active[data-tool="freehand"] {
+  border-color: #f44336;
+}
+
+.tool-button.active[data-tool="pan"] {
+  border-color: #9ccc65;
+}
+
+.tool-button.active[data-tool="measure"] {
+  border-color: #26c6da;
+}
+
+/* Animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tool-button {
+    min-height: 70px;
+    padding: var(--space-sm);
+  }
+
+  .tool-icon-container {
+    width: 32px;
+    height: 32px;
+  }
+
+  .tool-icon {
+    font-size: 1.25rem;
+  }
+
+  .tool-label {
+    font-size: 0.6875rem;
+  }
+
+  .tool-shortcut {
+    font-size: 0.625rem;
+    padding: 2px 6px;
+  }
+}
+
+/* Focus States for Accessibility */
+.tool-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.3);
+}
+
+.tool-button:focus:not(.active) {
+  border-color: var(--agro-accent);
+}
+
+/* Loading State (Optional) */
+.tool-button.loading .tool-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disabled State */
+.tool-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.tool-button:disabled:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--glass-border);
+}
+
+.tool-button:disabled:hover .tool-glow {
+  opacity: 0;
+}
+
+.tool-button:disabled:hover .tool-border {
+  border-color: var(--glass-border);
+}

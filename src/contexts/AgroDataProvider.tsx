@@ -7,8 +7,6 @@ import type {
   AreaPattern,
   Task,
   FieldRecord,
-  Point,
-  LatLng
 } from '@/types';
 
 interface AgroDataState {
@@ -126,7 +124,7 @@ const serializeState = (state: AgroDataState) => {
 };
 
 const deserializeState = (stateStr: string): AgroDataState => {
-  return JSON.parse(stateStr, (key, value) => {
+  return JSON.parse(stateStr, (_key, value) => {
     if (value && value.__type === 'Date') {
       return new Date(value.value);
     }

@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<IndexPage />} />
           <Route path="/analytics" element={<AnalyticsView />} />
-          <Route path="/planning" element={<PlanningView fields={[]} tasks={[]} onTaskUpdate={function (taskId: string, status: Task['status'], actualDuration?: number): void {
+          <Route path="/planning" element={<PlanningView fields={[]} tasks={[]} onTaskUpdate={function (_taskId: string, _status: Task['status'], _actualDuration?: number): void {
             throw new Error('Function not implemented.');
           }} />} />
         </Routes>

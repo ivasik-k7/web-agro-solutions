@@ -1,0 +1,456 @@
+/* PatternButton.css */
+.pattern-button {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  overflow: hidden;
+  min-height: 90px;
+  text-align: center;
+}
+
+.pattern-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border-radius: var(--radius-lg);
+}
+
+.pattern-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-glow);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.pattern-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, transparent, transparent) padding-box,
+    linear-gradient(135deg, var(--glass-border), var(--glass-border)) border-box;
+  transition: all var(--transition-normal);
+}
+
+.pattern-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(rgba(0, 212, 170, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 170, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+/* Active State */
+.pattern-button.active {
+  background: rgba(0, 212, 170, 0.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.pattern-button.active .pattern-glow {
+  opacity: 0.4;
+}
+
+.pattern-button.active .pattern-border {
+  background: linear-gradient(135deg, transparent, transparent) padding-box,
+    linear-gradient(135deg, var(--agro-accent), var(--agro-primary)) border-box;
+  border-width: 2px;
+}
+
+.pattern-button.active .pattern-grid-overlay {
+  opacity: 0.3;
+}
+
+.pattern-button.active .pattern-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 12px rgba(0, 212, 170, 0.8));
+}
+
+/* Hover Effects */
+.pattern-button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--agro-secondary);
+  transform: translateY(-1px);
+}
+
+.pattern-button:hover .pattern-glow {
+  opacity: 0.15;
+}
+
+.pattern-button:hover .pattern-border {
+  border-color: var(--agro-secondary);
+}
+
+.pattern-button:hover .pattern-grid-overlay {
+  opacity: 0.1;
+}
+
+/* Pattern Content */
+.pattern-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.pattern-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.pattern-icon {
+  font-size: 1.75rem;
+  transition: all var(--transition-normal);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* Active State Indicators */
+.active-ring {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid var(--agro-accent);
+  border-radius: 50%;
+  animation: rotate 3s linear infinite;
+}
+
+.active-pulse {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 1px solid var(--agro-accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Pattern Info */
+.pattern-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.pattern-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--agro-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.pattern-description {
+  font-size: 0.6875rem;
+  color: var(--agro-light);
+  opacity: 0.7;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pattern-button.active .pattern-label {
+  color: var(--agro-accent);
+  text-shadow: 0 0 8px rgba(0, 212, 170, 0.4);
+}
+
+/* Pattern Tooltip */
+.pattern-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--agro-dark);
+  border: 1px solid var(--agro-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.75rem;
+  color: var(--agro-light);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+}
+
+.pattern-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--agro-primary);
+}
+
+.pattern-button:hover .pattern-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Pattern-specific Styles */
+.pattern-button[data-pattern="grid"] .pattern-icon {
+  color: #00e676;
+}
+
+.pattern-button[data-pattern="hexagon"] .pattern-icon {
+  color: #29b6f6;
+}
+
+.pattern-button[data-pattern="contour"] .pattern-icon {
+  color: #ff9100;
+}
+
+.pattern-button[data-pattern="radial"] .pattern-icon {
+  color: #ab47bc;
+}
+
+.pattern-button[data-pattern="parallel"] .pattern-icon {
+  color: #26c6da;
+}
+
+.pattern-button.active[data-pattern="grid"] {
+  border-color: #00e676;
+}
+
+.pattern-button.active[data-pattern="hexagon"] {
+  border-color: #29b6f6;
+}
+
+.pattern-button.active[data-pattern="contour"] {
+  border-color: #ff9100;
+}
+
+.pattern-button.active[data-pattern="radial"] {
+  border-color: #ab47bc;
+}
+
+.pattern-button.active[data-pattern="parallel"] {
+  border-color: #26c6da;
+}
+
+/* Pattern-specific Decorations */
+.pattern-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.pattern-button.active .pattern-decoration {
+  opacity: 0.1;
+}
+
+.pattern-decoration.grid {
+  background: linear-gradient(
+        90deg,
+        transparent 49%,
+        currentColor 50%,
+        transparent 51%
+      )
+      0 0 / 20px 20px,
+    linear-gradient(transparent 49%, currentColor 50%, transparent 51%) 0 0 /
+      20px 20px;
+}
+
+.pattern-decoration.hexagon {
+  background: radial-gradient(circle, currentColor 1px, transparent 1px) 0 0 /
+      20px 20px,
+    radial-gradient(circle, currentColor 1px, transparent 1px) 10px 10px / 20px
+      20px;
+}
+
+.pattern-decoration.contour {
+  background: linear-gradient(
+        45deg,
+        transparent 49%,
+        currentColor 50%,
+        transparent 51%
+      )
+      0 0 / 15px 15px,
+    linear-gradient(-45deg, transparent 49%, currentColor 50%, transparent 51%)
+      0 0 / 15px 15px;
+}
+
+.pattern-decoration.radial {
+  background: radial-gradient(circle, currentColor 1px, transparent 1px) center /
+    20px 20px;
+}
+
+.pattern-decoration.parallel {
+  background: linear-gradient(
+      90deg,
+      transparent 49%,
+      currentColor 50%,
+      transparent 51%
+    )
+    0 0 / 10px 10px;
+}
+
+/* Animations */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes pattern-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+.pattern-button.active .pattern-icon {
+  animation: pattern-float 3s ease-in-out infinite;
+}
+
+/* Focus States for Accessibility */
+.pattern-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.3);
+}
+
+.pattern-button:focus:not(.active) {
+  border-color: var(--agro-accent);
+}
+
+/* Disabled State */
+.pattern-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.pattern-button:disabled:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--glass-border);
+}
+
+.pattern-button:disabled:hover .pattern-glow,
+.pattern-button:disabled:hover .pattern-grid-overlay {
+  opacity: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pattern-button {
+    min-height: 80px;
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .pattern-icon-container {
+    width: 36px;
+    height: 36px;
+  }
+
+  .pattern-icon {
+    font-size: 1.5rem;
+  }
+
+  .pattern-label {
+    font-size: 0.6875rem;
+  }
+
+  .pattern-description {
+    font-size: 0.625rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .active-ring {
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-width: 1px;
+  }
+
+  .active-pulse {
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+  }
+}
+
+/* Compact Variant */
+.pattern-button.compact {
+  min-height: 70px;
+  padding: var(--space-sm);
+}
+
+.pattern-button.compact .pattern-icon-container {
+  width: 32px;
+  height: 32px;
+}
+
+.pattern-button.compact .pattern-icon {
+  font-size: 1.25rem;
+}
+
+.pattern-button.compact .pattern-description {
+  display: none;
+}

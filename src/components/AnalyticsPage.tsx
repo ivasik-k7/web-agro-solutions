@@ -1,22 +1,68 @@
-import React from 'react';
+// components/AnalyticsView.tsx
+import React, { useEffect, useRef } from 'react';
 import "@styles/AnalyticsPage.css"
-// import type { FieldBoundary } from '@/types';
 import { useFieldAnalytics, useHealthAnalytics, usePerformanceAnalytics } from '@/hooks/useFieldAnalytics';
 import { useAgroDataManager } from '@/hooks/useAgroDataManager';
 
-// interface AnalyticsViewProps {
-//     fields: FieldBoundary[];
-// }
-
 export const AnalyticsView: React.FC = () => {
     const agroData = useAgroDataManager();
-
     const fields = agroData.fields;
-
     const analytics = useFieldAnalytics(fields);
-    // const cropAnalytics = useCropAnalytics(fields);
     const healthAnalytics = useHealthAnalytics(fields);
     const performanceAnalytics = usePerformanceAnalytics(fields);
+
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const createParticle = () => {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: 2px;
+                height: 2px;
+                background: var(--agro-primary);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1;
+            `;
+
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+            particle.style.boxShadow = '0 0 10px var(--agro-primary)';
+
+            container.appendChild(particle);
+
+            const animation = particle.animate([
+                {
+                    transform: 'translateY(0px)',
+                    opacity: 1
+                },
+                {
+                    transform: `translateY(${Math.random() * 100 - 50}px) translateX(${Math.random() * 100 - 50}px)`,
+                    opacity: 0
+                }
+            ], {
+                duration: 2000 + Math.random() * 3000,
+                easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+            });
+
+            animation.onfinish = () => {
+                particle.remove();
+                createParticle();
+            };
+        };
+
+        // Create initial particles
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+    }, []);
 
     const getHealthColor = (health: number) => {
         if (health >= 90) return 'var(--health-excellent)';
@@ -37,30 +83,40 @@ export const AnalyticsView: React.FC = () => {
         }
     };
 
+    const formatNumber = (num: number) => {
+        if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+        if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+        return num.toFixed(1);
+    };
+
     return (
-        <div className="analytics-container">
+        <div className="analytics-container" ref={containerRef}>
             {/* Left Sidebar */}
             <div className="analytics-sidebar left-sidebar">
                 <div className="sidebar-section">
-                    <h3>🌡️ Real-time Metrics</h3>
+                    <h3>🌡️ REAL-TIME SENSORS</h3>
                     <div className="real-time-metrics">
                         <div className="metric-item">
                             <span className="metric-label">Field Activity</span>
-                            <span className="metric-value active">Active</span>
+                            <span className="metric-value active">ACTIVE</span>
                         </div>
                         <div className="metric-item">
                             <span className="metric-label">Last Update</span>
-                            <span className="metric-value">Just now</span>
+                            <span className="metric-value">JUST NOW</span>
                         </div>
                         <div className="metric-item">
                             <span className="metric-label">Data Points</span>
                             <span className="metric-value">{fields.length * 12}</span>
                         </div>
+                        <div className="metric-item">
+                            <span className="metric-label">AI Processing</span>
+                            <span className="metric-value active">ONLINE</span>
+                        </div>
                     </div>
                 </div>
 
                 <div className="sidebar-section">
-                    <h3>🚨 Alerts</h3>
+                    <h3>🚨 CRITICAL ALERTS</h3>
                     <div className="alerts-list">
                         {performanceAnalytics.recommendations.slice(0, 3).map((rec, index) => (
                             <div key={index} className="alert-item">
@@ -70,27 +126,45 @@ export const AnalyticsView: React.FC = () => {
                         ))}
                     </div>
                 </div>
+
+                <div className="sidebar-section">
+                    <h3>⚡ SYSTEM STATUS</h3>
+                    <div className="real-time-metrics">
+                        <div className="metric-item">
+                            <span className="metric-label">AI Models</span>
+                            <span className="metric-value active">OPTIMAL</span>
+                        </div>
+                        <div className="metric-item">
+                            <span className="metric-label">Data Stream</span>
+                            <span className="metric-value active">STABLE</span>
+                        </div>
+                        <div className="metric-item">
+                            <span className="metric-label">Predictions</span>
+                            <span className="metric-value">94.7% ACC</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Main Content */}
             <div className="analytics-main">
                 <div className="analytics-header">
                     <div className="header-content">
-                        <h1>🌿 AGRO ANALYTICS DASHBOARD</h1>
-                        <p>Precision Agriculture Intelligence Platform</p>
+                        <h1>🌿 AGRO INTELLIGENCE PLATFORM</h1>
+                        <p>Real-time Agricultural Analytics & Predictive Insights</p>
                     </div>
                     <div className="header-stats">
                         <div className="header-stat">
                             <span className="stat-number">{analytics.totalFields}</span>
-                            <span className="stat-label">FIELDS</span>
+                            <span className="stat-label">ACTIVE FIELDS</span>
                         </div>
                         <div className="header-stat">
                             <span className="stat-number">{analytics.totalArea.toFixed(0)}</span>
-                            <span className="stat-label">ACRES</span>
+                            <span className="stat-label">TOTAL ACRES</span>
                         </div>
                         <div className="header-stat">
                             <span className="stat-number">{analytics.avgHealth.toFixed(0)}%</span>
-                            <span className="stat-label">HEALTH</span>
+                            <span className="stat-label">AVG HEALTH</span>
                         </div>
                     </div>
                 </div>
@@ -102,8 +176,8 @@ export const AnalyticsView: React.FC = () => {
                             <div className="kpi-icon">🌾</div>
                             <div className="kpi-trend up">+5.2%</div>
                         </div>
-                        <div className="kpi-value">{analytics.totalYield.toFixed(1)}T</div>
-                        <div className="kpi-label">Total Yield</div>
+                        <div className="kpi-value">{formatNumber(analytics.totalYield)}T</div>
+                        <div className="kpi-label">TOTAL YIELD</div>
                         <div className="kpi-progress">
                             <div className="progress-bar">
                                 <div className="progress-fill" style={{ width: '78%' }}></div>
@@ -117,7 +191,7 @@ export const AnalyticsView: React.FC = () => {
                             <div className="kpi-trend up">+2.1%</div>
                         </div>
                         <div className="kpi-value">{analytics.avgHealth.toFixed(1)}%</div>
-                        <div className="kpi-label">Field Health</div>
+                        <div className="kpi-label">FIELD HEALTH</div>
                         <div className="kpi-progress">
                             <div className="progress-bar">
                                 <div
@@ -137,7 +211,7 @@ export const AnalyticsView: React.FC = () => {
                             <div className="kpi-trend up">+8.7%</div>
                         </div>
                         <div className="kpi-value">{analytics.averageYieldPerAcre.toFixed(1)}</div>
-                        <div className="kpi-label">Yield/Acre</div>
+                        <div className="kpi-label">YIELD/ACRE</div>
                         <div className="kpi-progress">
                             <div className="progress-bar">
                                 <div className="progress-fill" style={{ width: '65%' }}></div>
@@ -150,8 +224,8 @@ export const AnalyticsView: React.FC = () => {
                             <div className="kpi-icon">💰</div>
                             <div className="kpi-trend up">+12.3%</div>
                         </div>
-                        <div className="kpi-value">${(analytics.totalYield * 180).toFixed(0)}K</div>
-                        <div className="kpi-label">Est. Revenue</div>
+                        <div className="kpi-value">${formatNumber(analytics.totalYield * 180)}</div>
+                        <div className="kpi-label">EST. REVENUE</div>
                         <div className="kpi-progress">
                             <div className="progress-bar">
                                 <div className="progress-fill" style={{ width: '82%' }}></div>
@@ -325,7 +399,7 @@ export const AnalyticsView: React.FC = () => {
             {/* Right Sidebar */}
             <div className="analytics-sidebar right-sidebar">
                 <div className="sidebar-section">
-                    <h3>🎯 FIELD TYPES</h3>
+                    <h3>🎯 FIELD ARCHETYPES</h3>
                     <div className="field-types">
                         {Object.entries(analytics.fieldTypeDistribution).map(([type, data]) => (
                             <div key={type} className="field-type-item">
@@ -335,6 +409,8 @@ export const AnalyticsView: React.FC = () => {
                                     {type === 'greenhouse' && '🏭'}
                                     {type === 'orchard' && '🌳'}
                                     {type === 'pasture' && '🐄'}
+                                    {type === 'boundary' && '📐'}
+                                    {type === 'crop_area' && '🌱'}
                                 </div>
                                 <div className="type-details">
                                     <span className="type-name">{type.replace('_', ' ')}</span>
@@ -352,7 +428,7 @@ export const AnalyticsView: React.FC = () => {
                 </div>
 
                 <div className="sidebar-section">
-                    <h3>🚀 OPTIMIZATION</h3>
+                    <h3>🚀 AI OPTIMIZATION</h3>
                     <div className="optimization-tips">
                         {performanceAnalytics.recommendations.slice(0, 2).map((rec, index) => (
                             <div key={index} className="tip-card">
@@ -367,7 +443,7 @@ export const AnalyticsView: React.FC = () => {
                 </div>
 
                 <div className="sidebar-section">
-                    <h3>📊 DATA QUALITY</h3>
+                    <h3>📊 DATA INTEGRITY</h3>
                     <div className="data-quality">
                         <div className="quality-metric">
                             <span className="quality-label">Completeness</span>
