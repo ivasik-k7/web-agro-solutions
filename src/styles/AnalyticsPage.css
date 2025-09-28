@@ -1,0 +1,821 @@
+/* Agro Futuristic Analytics Styles with Root Variables */
+.analytics-container {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 0;
+  min-height: 100vh;
+  background: var(--gradient-dark);
+  color: var(--agro-light);
+  font-family: var(--font-primary);
+}
+
+/* Sidebars */
+.analytics-sidebar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
+  padding: var(--space-xl) var(--space-lg);
+  overflow-y: auto;
+}
+
+.right-sidebar {
+  border-right: none;
+  border-left: 1px solid var(--glass-border);
+}
+
+.sidebar-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.sidebar-section h3 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--space-lg);
+  color: var(--agro-secondary);
+  opacity: 0.8;
+}
+
+/* Real-time Metrics */
+.real-time-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.metric-value {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.metric-value.active {
+  color: var(--agro-primary);
+}
+
+/* Alerts */
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: rgba(255, 82, 82, 0.1);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--error);
+}
+
+.alert-indicator {
+  width: 6px;
+  height: 6px;
+  background: var(--error);
+  border-radius: 50%;
+  margin-top: 6px;
+  animation: pulse 2s infinite;
+}
+
+.alert-text {
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  opacity: 0.9;
+}
+
+/* Growth Stages */
+.growth-stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.stage-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.stage-name {
+  font-size: 0.6875rem;
+  text-transform: capitalize;
+  min-width: 60px;
+  opacity: 0.8;
+}
+
+.stage-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.stage-progress {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-normal);
+}
+
+.stage-count {
+  font-size: 0.625rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: right;
+}
+
+/* Main Content */
+.analytics-main {
+  padding: 0;
+  overflow-y: auto;
+  background: var(--gradient-surface);
+  position: relative;
+}
+
+.analytics-main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.analytics-header {
+  background: var(--gradient-glow);
+  padding: var(--space-2xl) var(--space-2xl);
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+  z-index: 1;
+}
+
+.header-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-content p {
+  font-size: 0.875rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.header-stats {
+  display: flex;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.header-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--agro-primary);
+}
+
+.stat-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-top: var(--space-xs);
+}
+
+/* KPI Grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-2xl) var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.kpi-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--agro-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+.kpi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.kpi-icon {
+  font-size: 1.5rem;
+}
+
+.kpi-trend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-lg);
+}
+
+.kpi-trend.up {
+  background: rgba(0, 168, 107, 0.2);
+  color: var(--agro-primary);
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  background: linear-gradient(135deg, #ffffff 0%, var(--agro-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.kpi-label {
+  font-size: 0.875rem;
+  opacity: 0.7;
+  margin-bottom: var(--space-md);
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-normal);
+}
+
+/* Analytics Grid */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-lg);
+  padding: 0 var(--space-2xl) var(--space-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.analytics-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+}
+
+.analytics-card.wide {
+  grid-column: 1 / -1;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+.card-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--agro-secondary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-score {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.card-action {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--agro-light);
+}
+
+.card-action:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--agro-accent);
+}
+
+/* Crop Distribution */
+.crop-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.crop-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.crop-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.crop-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.crop-metrics {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metric-value {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.metric-label {
+  font-size: 0.625rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.crop-visualization {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.crop-bar {
+  height: 100%;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+/* Health Radar */
+.health-radar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.health-sector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sector-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.sector-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sector-name {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  flex: 1;
+}
+
+.sector-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.sector-bar {
+  height: 120px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-sm);
+}
+
+.sector-fill {
+  width: 100%;
+  border-radius: var(--radius-md);
+  transition: height var(--transition-normal);
+}
+
+/* Soil Composition */
+.soil-composition {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.soil-element {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.element-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.element-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.element-percentage {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--agro-primary);
+}
+
+.element-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.element-health {
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.element-visualization {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.element-bar {
+  height: 100%;
+  border-radius: var(--radius-lg);
+  transition: width var(--transition-normal);
+}
+
+/* Performance Metrics */
+.trend-indicators {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.trend {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.trend.up {
+  background: rgba(0, 168, 107, 0.2);
+  color: var(--agro-primary);
+}
+
+.trend.down {
+  background: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+}
+
+.performance-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.performance-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+}
+
+.metric-name {
+  font-size: 0.6875rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* Field Types */
+.field-types {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.field-type-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.field-type-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.type-icon {
+  font-size: 1rem;
+}
+
+.type-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.type-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.type-area {
+  font-size: 0.625rem;
+  opacity: 0.6;
+}
+
+.type-health {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Optimization Tips */
+.optimization-tips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.tip-card {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(0, 168, 107, 0.1);
+  border: 1px solid rgba(0, 168, 107, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.tip-icon {
+  font-size: 1rem;
+  color: var(--agro-primary);
+}
+
+.tip-content p {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  margin: 0 0 var(--space-xs) 0;
+}
+
+.tip-priority {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  background: rgba(255, 82, 82, 0.2);
+  color: var(--error);
+  border-radius: var(--radius-sm);
+}
+
+/* Data Quality */
+.data-quality {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.quality-metric {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.quality-label {
+  font-size: 0.6875rem;
+  opacity: 0.7;
+  min-width: 80px;
+}
+
+.quality-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.quality-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-sm);
+}
+
+.quality-value {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* Health Status Colors */
+.health-excellent {
+  background: var(--health-excellent);
+}
+.health-good {
+  background: var(--health-good);
+}
+.health-average {
+  background: var(--health-average);
+}
+.health-poor {
+  background: var(--health-poor);
+}
+.health-critical {
+  background: var(--health-critical);
+}
+
+/* Field Type Colors */
+.field-type-item[data-type="field"] .type-icon {
+  color: var(--field-color);
+}
+.field-type-item[data-type="irrigation"] .type-icon {
+  color: var(--irrigation-color);
+}
+.field-type-item[data-type="boundary"] .type-icon {
+  color: var(--boundary-color);
+}
+.field-type-item[data-type="crop_area"] .type-icon {
+  color: var(--crop-area-color);
+}
+.field-type-item[data-type="greenhouse"] .type-icon {
+  color: var(--success);
+}
+.field-type-item[data-type="orchard"] .type-icon {
+  color: var(--warning);
+}
+.field-type-item[data-type="pasture"] .type-icon {
+  color: var(--info);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(var(--grid-size), var(--grid-size));
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .analytics-container {
+    grid-template-columns: 250px 1fr 250px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .analytics-container {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-sidebar {
+    display: none;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    padding: var(--space-lg);
+  }
+
+  .analytics-grid {
+    padding: 0 var(--space-lg) var(--space-lg);
+  }
+
+  .analytics-header {
+    padding: var(--space-xl) var(--space-lg);
+  }
+}

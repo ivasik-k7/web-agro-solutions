@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ViewMode } from '@/types';
+import { Link } from 'react-router-dom';
 
 interface ViewModeTabsProps {
     mode: ViewMode;
@@ -14,17 +15,19 @@ export const ViewModeTabs: React.FC<ViewModeTabsProps> = ({ mode, onChange }) =>
         >
             🗺️ Map
         </button>
-        <button
+        <Link to="/analytics" className={`tab-button ${mode === 'analytics' ? 'active' : ''}`}>
+            📊 Analytics
+        </Link>
+
+        {/* <button
             className={`tab-button ${mode === 'analytics' ? 'active' : ''}`}
             onClick={() => onChange('analytics')}
         >
             📊 Analytics
-        </button>
-        <button
-            className={`tab-button ${mode === 'planning' ? 'active' : ''}`}
-            onClick={() => onChange('planning')}
-        >
+        </button> */}
+        <Link to="/planning" className={`tab-button ${mode === 'planning' ? 'active' : ''}`}>
             📋 Planning
-        </button>
+        </Link>
+
     </div>
 );

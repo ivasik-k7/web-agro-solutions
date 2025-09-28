@@ -1,37 +1,26 @@
-import React, { useRef, useState } from 'react';
-import type { FieldBoundary, ViewMode } from '@/types';
+// pages/index.tsx
+import React, { useRef } from 'react';
+import { useAgroDataManager } from '@/hooks/useAgroDataManager';
 
-import { PlanningView } from '@components/PlanningView'
-import { LeftSidebar, RightSidebar } from "@components/Sidebar"
-import { AnalyticsView } from "@components/AnalyticsView"
+import { PlanningView } from '@components/PlanningView';
+import { LeftSidebar, RightSidebar } from "@components/Sidebar";
+import { AnalyticsView } from "@/components/AnalyticsPage";
 import { FieldDetailsPanel } from '@components/FieldDetailsPanel';
 import { AgroMap } from '@/components/AgroMap';
 
-import { useFieldManagement } from '@/hooks/useFieldManagement';
 import { useDrawingTools } from '@hooks/useDrawingTools';
 import { useMapNavigation } from '@hooks/useMapNavigation';
-// import { useTaskManagement } from '@/hooks/useTaskManagement';
+import type { FieldBoundary, Task } from '@/types';
 
-const IndexPage: React.FC = () => {
-    // Refs
+const AppContent: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null!);
     const canvasRef = useRef<HTMLCanvasElement>(null!);
     const backgroundRef = useRef<HTMLDivElement>(null!);
 
-    // Custom Hooks
-    const {
-        fields,
-        // setFields,
-        selectedFieldId,
-        setSelectedFieldId,
-        addField,
-        updateField,
-        deleteField,
-        clearAllFields,
-        totalFarmArea,
-        estimatedTotalYield
-    } = useFieldManagement([]);
+    // Use the new data manager
+    const agroData = useAgroDataManager();
 
+    // Use existing hooks for drawing and map navigation
     const {
         selectedTool,
         selectedPattern,
@@ -43,10 +32,10 @@ const IndexPage: React.FC = () => {
 
     // Create field handler for the map navigation hook
     const handleFieldCreate = (fieldData: Omit<FieldBoundary, 'id'>) => {
-        const newField = addField(fieldData);
+        const newField = agroData.addField(fieldData);
         // Optionally select the newly created field
         if (newField) {
-            setSelectedFieldId(newField.id);
+            agroData.setSelectedFieldId(newField.id);
         }
     };
 
@@ -54,70 +43,52 @@ const IndexPage: React.FC = () => {
         mapCenter,
         mapZoom,
         isDragging,
-        // Add these new properties from the enhanced hook
         isDrawing,
         currentPath,
         transformPoint,
-        // inverseTransformPoint,
         zoomIn,
         zoomOut,
         resetView,
         handleCanvasMouseDown,
         handleCanvasMouseMove,
         handleCanvasMouseUp,
-        // Add double-click handler for polygon completion
         handleCanvasDoubleClick,
-        // setMapCenter,
-        // setMapZoom
     } = useMapNavigation({
         containerRef,
         selectedTool,
-        fields,
-        onFieldSelect: setSelectedFieldId,
-        onFieldCreate: handleFieldCreate // Pass the field creation handler
+        fields: agroData.fields,
+        onFieldSelect: agroData.setSelectedFieldId,
+        onFieldCreate: handleFieldCreate
     });
 
-    // UI State
-    const [viewMode, setViewMode] = useState<ViewMode>('map');
-    const [farmName, setFarmName] = useState('My Farm');
-    const [season, setSeason] = useState('Spring 2024');
-    const [editingField, setEditingField] = useState<FieldBoundary | null>(null);
-    const [showFieldDetails, setShowFieldDetails] = useState(false);
+    // Sync map state with data provider
+    // React.useEffect(() => {
+    //     agroData.setMapCenter(mapCenter);
+    //     agroData.setMapZoom(mapZoom);
+    // }, [mapCenter, mapZoom]);
 
-    // Enhanced field operations
     const handleSaveRecord = () => {
-        const record = {
-            farmName,
-            season,
-            fields,
-            totalArea: totalFarmArea,
-            estimatedYield: estimatedTotalYield,
-            timestamp: new Date(),
-            mapCenter,
-            mapZoom
-        };
-
+        const record = agroData.saveFarmRecord();
         console.log('Saving farm record:', record);
-        // Here you could save to localStorage, send to API, etc.
         alert('Farm record saved successfully!');
     };
 
     const handleDeleteSelectedField = () => {
-        if (selectedFieldId) {
-            deleteField(selectedFieldId);
+        if (agroData.selectedFieldId) {
+            agroData.deleteField(agroData.selectedFieldId);
         }
     };
 
     const renderCurrentView = () => {
-        switch (viewMode) {
+        switch (agroData.viewMode) {
             case 'analytics':
-                return <AnalyticsView fields={fields} />;
             case 'planning':
                 return (
                     <PlanningView
-                        fields={fields}
-                        tasks={[]} // Add tasks when ready
-                        onTaskUpdate={() => { }} // Add task update handler
+                        fields={agroData.fields}
+                        tasks={agroData.tasks} onTaskUpdate={function (taskId: string, status: Task['status'], actualDuration?: number): void {
+                            throw new Error('Function not implemented.');
+                        }}                        // onTaskUpdate={(taskId, updates) => agroData.updateTask(taskId, updates)}
                     />
                 );
             case 'map':
@@ -128,10 +99,9 @@ const IndexPage: React.FC = () => {
                         canvasRef={canvasRef}
                         selectedTool={selectedTool}
                         mapZoom={mapZoom}
-                        fields={fields}
-                        selectedFieldId={selectedFieldId}
+                        fields={agroData.fields}
+                        selectedFieldId={agroData.selectedFieldId}
                         drawingColor={drawingColor}
-                        // Add new props for drawing state
                         isDrawing={isDrawing}
                         currentPath={currentPath}
                         isDragging={isDragging}
@@ -153,25 +123,25 @@ const IndexPage: React.FC = () => {
         <div className="field-map-app">
             {/* Left Sidebar */}
             <LeftSidebar
-                viewMode={viewMode}
+                viewMode={agroData.viewMode}
                 selectedTool={selectedTool}
                 selectedPattern={selectedPattern}
                 drawingColor={drawingColor}
-                farmName={farmName}
-                season={season}
-                fields={fields}
-                totalFarmArea={totalFarmArea}
-                estimatedTotalYield={estimatedTotalYield}
-                onViewModeChange={setViewMode}
+                farmName={agroData.farmName}
+                season={agroData.season}
+                fields={agroData.fields}
+                totalFarmArea={agroData.totalFarmArea}
+                estimatedTotalYield={agroData.estimatedTotalYield}
+                onViewModeChange={agroData.setViewMode}
                 onToolSelect={setSelectedTool}
                 onPatternSelect={setSelectedPattern}
                 onColorChange={setDrawingColor}
-                onFarmNameChange={setFarmName}
-                onSeasonChange={setSeason}
+                onFarmNameChange={agroData.setFarmName}
+                onSeasonChange={agroData.setSeason}
                 onSaveRecord={handleSaveRecord}
                 onDeleteSelectedField={handleDeleteSelectedField}
-                onClearAllFields={clearAllFields}
-                selectedField={selectedFieldId}
+                onClearAllFields={agroData.clearAllFields}
+                selectedField={agroData.selectedFieldId}
             />
 
             {/* Main Content */}
@@ -181,34 +151,38 @@ const IndexPage: React.FC = () => {
 
             {/* Right Sidebar */}
             <RightSidebar
-                fields={fields}
-                selectedField={selectedFieldId}
-                onFieldSelect={setSelectedFieldId}
+                fields={agroData.fields}
+                selectedField={agroData.selectedFieldId}
+                onFieldSelect={agroData.setSelectedFieldId}
                 onFieldEdit={(field) => {
-                    setEditingField(field);
-                    setShowFieldDetails(true);
+                    agroData.setEditingField(field);
+                    agroData.setShowFieldDetails(true);
                 }}
             />
 
             {/* Field Details Modal */}
-            {showFieldDetails && editingField && (
+            {agroData.showFieldDetails && agroData.editingField && (
                 <div className="modal-overlay">
                     <FieldDetailsPanel
-                        field={editingField}
+                        field={agroData.editingField}
                         onUpdate={(updatedField) => {
-                            updateField(updatedField.id, updatedField);
-                            setShowFieldDetails(false);
-                            setEditingField(null);
+                            agroData.updateField(updatedField.id, updatedField);
+                            agroData.setShowFieldDetails(false);
+                            agroData.setEditingField(null);
                         }}
                         onClose={() => {
-                            setShowFieldDetails(false);
-                            setEditingField(null);
+                            agroData.setShowFieldDetails(false);
+                            agroData.setEditingField(null);
                         }}
                     />
                 </div>
             )}
         </div>
     );
-}
+};
+
+const IndexPage: React.FC = () => {
+    return <AppContent />
+};
 
 export default IndexPage;

@@ -2,15 +2,27 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 import './App.css'
 
 import IndexPage from '@pages/IndexPage';
+import { AnalyticsView } from './components/AnalyticsPage';
+import { AgroDataProvider } from '@/contexts/AgroDataProvider';
+import { PlanningView } from './components/PlanningView';
+import type { Task } from './types';
+
 
 
 function App() {
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<IndexPage />} />
-      </Routes>
-    </HashRouter>
+    <AgroDataProvider>
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<IndexPage />} />
+          <Route path="/analytics" element={<AnalyticsView />} />
+          <Route path="/planning" element={<PlanningView fields={[]} tasks={[]} onTaskUpdate={function (taskId: string, status: Task['status'], actualDuration?: number): void {
+            throw new Error('Function not implemented.');
+          }} />} />
+        </Routes>
+      </HashRouter>
+    </AgroDataProvider>
+
   )
 }
 
