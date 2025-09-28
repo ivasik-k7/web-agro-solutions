@@ -10,7 +10,7 @@ import { AgroMap } from '@/components/AgroMap';
 import { useFieldManagement } from '@/hooks/useFieldManagement';
 import { useDrawingTools } from '@hooks/useDrawingTools';
 import { useMapNavigation } from '@hooks/useMapNavigation';
-import { useTaskManagement } from '@/hooks/useTaskManagement';
+// import { useTaskManagement } from '@/hooks/useTaskManagement';
 
 const IndexPage: React.FC = () => {
     // Refs
@@ -21,12 +21,13 @@ const IndexPage: React.FC = () => {
     // Custom Hooks
     const {
         fields,
-        setFields,
+        // setFields,
         selectedFieldId,
         setSelectedFieldId,
         addField,
         updateField,
         deleteField,
+        clearAllFields,
         totalFarmArea,
         estimatedTotalYield
     } = useFieldManagement([]);
@@ -40,38 +41,72 @@ const IndexPage: React.FC = () => {
         setDrawingColor
     } = useDrawingTools();
 
-    const {
-        tasks,
-        updateTaskStatus
-    } = useTaskManagement(fields);
+    // Create field handler for the map navigation hook
+    const handleFieldCreate = (fieldData: Omit<FieldBoundary, 'id'>) => {
+        const newField = addField(fieldData);
+        // Optionally select the newly created field
+        if (newField) {
+            setSelectedFieldId(newField.id);
+        }
+    };
 
     const {
         mapCenter,
         mapZoom,
         isDragging,
+        // Add these new properties from the enhanced hook
+        isDrawing,
+        currentPath,
         transformPoint,
-        inverseTransformPoint,
+        // inverseTransformPoint,
         zoomIn,
         zoomOut,
         resetView,
         handleCanvasMouseDown,
         handleCanvasMouseMove,
         handleCanvasMouseUp,
-        setMapCenter,
-        setMapZoom
+        // Add double-click handler for polygon completion
+        handleCanvasDoubleClick,
+        // setMapCenter,
+        // setMapZoom
     } = useMapNavigation({
         containerRef,
         selectedTool,
         fields,
-        onFieldSelect: setSelectedFieldId
+        onFieldSelect: setSelectedFieldId,
+        onFieldCreate: handleFieldCreate // Pass the field creation handler
     });
 
     // UI State
     const [viewMode, setViewMode] = useState<ViewMode>('map');
-    const [farmName, setFarmName] = useState('');
-    const [season, setSeason] = useState('');
+    const [farmName, setFarmName] = useState('My Farm');
+    const [season, setSeason] = useState('Spring 2024');
     const [editingField, setEditingField] = useState<FieldBoundary | null>(null);
     const [showFieldDetails, setShowFieldDetails] = useState(false);
+
+    // Enhanced field operations
+    const handleSaveRecord = () => {
+        const record = {
+            farmName,
+            season,
+            fields,
+            totalArea: totalFarmArea,
+            estimatedYield: estimatedTotalYield,
+            timestamp: new Date(),
+            mapCenter,
+            mapZoom
+        };
+
+        console.log('Saving farm record:', record);
+        // Here you could save to localStorage, send to API, etc.
+        alert('Farm record saved successfully!');
+    };
+
+    const handleDeleteSelectedField = () => {
+        if (selectedFieldId) {
+            deleteField(selectedFieldId);
+        }
+    };
 
     const renderCurrentView = () => {
         switch (viewMode) {
@@ -81,8 +116,8 @@ const IndexPage: React.FC = () => {
                 return (
                     <PlanningView
                         fields={fields}
-                        tasks={tasks}
-                        onTaskUpdate={updateTaskStatus}
+                        tasks={[]} // Add tasks when ready
+                        onTaskUpdate={() => { }} // Add task update handler
                     />
                 );
             case 'map':
@@ -96,6 +131,10 @@ const IndexPage: React.FC = () => {
                         fields={fields}
                         selectedFieldId={selectedFieldId}
                         drawingColor={drawingColor}
+                        // Add new props for drawing state
+                        isDrawing={isDrawing}
+                        currentPath={currentPath}
+                        isDragging={isDragging}
                         transformPoint={transformPoint}
                         onZoomIn={zoomIn}
                         onZoomOut={zoomOut}
@@ -104,6 +143,7 @@ const IndexPage: React.FC = () => {
                         onMouseMove={handleCanvasMouseMove}
                         onMouseUp={handleCanvasMouseUp}
                         onMouseLeave={handleCanvasMouseUp}
+                        onDoubleClick={handleCanvasDoubleClick}
                     />
                 );
         }
@@ -128,9 +168,9 @@ const IndexPage: React.FC = () => {
                 onColorChange={setDrawingColor}
                 onFarmNameChange={setFarmName}
                 onSeasonChange={setSeason}
-                onSaveRecord={() => {/* Implement save logic */ }}
-                onDeleteSelectedField={() => selectedFieldId && deleteField(selectedFieldId)}
-                onClearAllFields={() => setFields([])}
+                onSaveRecord={handleSaveRecord}
+                onDeleteSelectedField={handleDeleteSelectedField}
+                onClearAllFields={clearAllFields}
                 selectedField={selectedFieldId}
             />
 
@@ -158,6 +198,7 @@ const IndexPage: React.FC = () => {
                         onUpdate={(updatedField) => {
                             updateField(updatedField.id, updatedField);
                             setShowFieldDetails(false);
+                            setEditingField(null);
                         }}
                         onClose={() => {
                             setShowFieldDetails(false);

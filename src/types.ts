@@ -73,7 +73,7 @@ export interface FieldBoundary {
     // Temporal Data
     plantingDate?: Date;
     harvestDate?: Date;
-    growthStage?: 'germination' | 'vegetative' | 'flowering' | 'fruiting' | 'maturity';
+    growthStage?: 'germination' | 'vegetative' | 'flowering' | 'fruiting' | 'maturity' | 'planning';
     
     // Soil and Environment
     soilType?: string;

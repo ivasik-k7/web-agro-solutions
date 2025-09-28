@@ -1,6 +1,5 @@
 import React from 'react';
 import type { ViewMode, DrawingTool, AreaPattern, FieldBoundary } from '@/types';
-import { FieldCard } from '@components/FieldCard';
 import { HealthIndicator } from '@components/HealthIndicator';
 import { ToolButton } from '@components/ToolButton';
 import { PatternButton } from '@components/PatternButton';
@@ -281,7 +280,7 @@ interface RightSidebarProps {
 export const RightSidebar: React.FC<RightSidebarProps> = ({
     fields,
     selectedField,
-    onFieldSelect,
+    // onFieldSelect,
     onFieldEdit
 }) => {
     const selectedFieldData = fields.find(f => f.id === selectedField);
@@ -296,7 +295,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
             <ScrollContainer>
                 <div className="sidebar-content">
-                    <SidebarSection title={`Fields (${fields.length})`} icon="🌾">
+                    {/* <SidebarSection title={`Fields (${fields.length})`} icon="🌾">
                         <div className="field-list">
                             {fields.map(field => (
                                 <FieldCard
@@ -315,7 +314,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                                 </div>
                             )}
                         </div>
-                    </SidebarSection>
+                    </SidebarSection> */}
 
                     {selectedFieldData && (
                         <SidebarSection title="Selected Field" icon="⭐">
